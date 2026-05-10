@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT
 """
 Sobel X edge-based direction detector.
 

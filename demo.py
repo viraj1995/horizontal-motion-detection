@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT
 """
 Demo and CLI for DirectionDetector.
 
