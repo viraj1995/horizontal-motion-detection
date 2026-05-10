@@ -1,14 +1,12 @@
 # Horizontal Motion Detection
 
-Detects camera ego-motion direction using phase correlation (FFT-based cross-correlation). Works at low framerates with low-texture images where optical flow methods struggle.
+Detects camera ego-motion direction using two methods: phase correlation (FFT-based) or Sobel X edge centroid tracking. Works at low framerates with low-texture images where optical flow methods struggle.
 
-## How It Works
+## Methods
 
-1. Preprocess frames: grayscale, downscale, mild blur
-2. Compute FFT of both frames
-3. Cross-power spectrum → inverse FFT → correlation surface
-4. Peak location gives the dominant pixel translation
-5. Horizontal shift direction is opposite to camera movement
+**Phase correlation** (default) — Computes the dominant pixel translation between frames via FFT-based cross-correlation. More accurate for general scenes.
+
+**Sobel X edge centroid** — Tracks the center of mass of vertical edges between frames. Simpler, faster, useful for corridor/doorway following.
 
 ## Installation
 
@@ -21,7 +19,12 @@ pip install numpy opencv-python
 ```python
 from direction_detector import MotionDetector
 
+# Phase correlation (default)
 detector = MotionDetector()
+
+# Or use Sobel X edge centroid
+detector = MotionDetector(method="sobel_x")
+
 direction = detector.detect_direction(frame1, frame2)
 print(direction)  # 'left', 'right', or 'stationary'
 ```

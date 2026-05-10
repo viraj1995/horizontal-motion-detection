@@ -25,20 +25,17 @@ def create_test_image(width=640, height=480, offset=0):
 
 
 def run_synthetic_test():
-    """Validate detector with synthetic images."""
-    detector = MotionDetector(debug=True)
-
+    """Validate both methods with synthetic images."""
     img1 = create_test_image(offset=0)
     img2 = create_test_image(offset=10)
-    print(f"Shift right: {detector.detect_direction(img1, img2)}")
+    img3 = create_test_image(offset=0)
 
-    img1 = create_test_image(offset=10)
-    img2 = create_test_image(offset=0)
-    print(f"Shift left: {detector.detect_direction(img1, img2)}")
-
-    img1 = create_test_image(offset=0)
-    img2 = create_test_image(offset=0)
-    print(f"No shift: {detector.detect_direction(img1, img2)}")
+    for method in ("phase_correlation", "sobel_x"):
+        detector = MotionDetector(method=method, debug=True)
+        print(f"\n--- {method} ---")
+        print(f"Shift right: {detector.detect_direction(img1, img2)}")
+        print(f"Shift left:  {detector.detect_direction(img2, img1)}")
+        print(f"No shift:    {detector.detect_direction(img1, img3)}")
 
 
 def compare_images(img1_path: str, img2_path: str):
