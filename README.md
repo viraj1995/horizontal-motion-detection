@@ -1,13 +1,14 @@
-# Optical Flow Direction Detection
+# Horizontal Motion Detection
 
-Detects camera ego-motion direction using Sobel X edge tracking. Works at low framerates with low-texture images where optical flow methods struggle.
+Detects camera ego-motion direction using phase correlation (FFT-based cross-correlation). Works at low framerates with low-texture images where optical flow methods struggle.
 
 ## How It Works
 
-1. Apply Sobel X filter to enhance vertical edges
-2. Compute weighted centroid of edge intensity per frame
-3. Track centroid shift between frames
-4. Edge shift direction is opposite to camera movement
+1. Preprocess frames: grayscale, downscale, mild blur
+2. Compute FFT of both frames
+3. Cross-power spectrum → inverse FFT → correlation surface
+4. Peak location gives the dominant pixel translation
+5. Horizontal shift direction is opposite to camera movement
 
 ## Installation
 
@@ -18,9 +19,9 @@ pip install numpy opencv-python
 ## Usage
 
 ```python
-from direction_detector import DirectionDetector
+from direction_detector import MotionDetector
 
-detector = DirectionDetector()
+detector = MotionDetector()
 direction = detector.detect_direction(frame1, frame2)
 print(direction)  # 'left', 'right', or 'stationary'
 ```

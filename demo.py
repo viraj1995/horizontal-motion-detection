@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: MIT
 """
-Demo and CLI for DirectionDetector.
+Demo and CLI for MotionDetector.
 
 Usage:
     python demo.py                          - Run synthetic test
@@ -12,11 +12,11 @@ import sys
 import numpy as np
 import cv2
 from collections import Counter
-from direction_detector import DirectionDetector
+from direction_detector import MotionDetector
 
 
 def create_test_image(width=640, height=480, offset=0):
-    """Create a grayscale image with vertical edges at a given offset."""
+    """Create a grayscale image with varied content at a given horizontal offset."""
     img = np.zeros((height, width), dtype=np.uint8)
     for x in range(20 + offset, width, 60):
         cv2.rectangle(img, (x, 20), (x + 40, height - 20), 255, -1)
@@ -26,7 +26,7 @@ def create_test_image(width=640, height=480, offset=0):
 
 def run_synthetic_test():
     """Validate detector with synthetic images."""
-    detector = DirectionDetector(debug=True)
+    detector = MotionDetector(debug=True)
 
     img1 = create_test_image(offset=0)
     img2 = create_test_image(offset=10)
@@ -42,7 +42,7 @@ def run_synthetic_test():
 
 
 def compare_images(img1_path: str, img2_path: str):
-    detector = DirectionDetector(debug=True)
+    detector = MotionDetector(debug=True)
     img1 = cv2.imread(img1_path)
     img2 = cv2.imread(img2_path)
     if img1 is None or img2 is None:
@@ -58,7 +58,7 @@ def process_video(video_path: str, sample_every_n: int = 5):
         print(f"Error: Could not open video {video_path}")
         return
 
-    detector = DirectionDetector(debug=True)
+    detector = MotionDetector(debug=True)
     directions = []
     prev_frame = None
     frame_count = 0
